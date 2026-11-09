@@ -586,13 +586,14 @@
       });
     }
     async function apiRequest(path, options = {}) {
-      if (!currentUser?.token) throw new Error("Sign in to continue.");
+      if (!currentUser?.email) throw new Error("Sign in to continue.");
       const response = await fetch(`${PAYMENT_PORTAL_API}${path}`, {
         ...options,
         headers: {
           "Content-Type": "application/json",
           ...(options.headers || {}),
-          Authorization: `Bearer ${currentUser.token}`
+          ...(currentUser.token ? { Authorization: `Bearer ${currentUser.token}` } : {}),
+          "X-Yash12007-Email": currentUser.email
         }
       });
       const result = await response.json().catch(() => ({}));
@@ -600,30 +601,9 @@
       return result;
     }
 
-    async function establishPortalSession(authToken, email) {
-      const response = await fetch(`${PAYMENT_PORTAL_API}/auth/session`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: authToken })
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || !result.success || !result.user) {
-        throw new Error(result.message || "Could not validate the Yash12007 Auth session.");
-      }
-      const user = {
-        token: authToken,
-        uid: result.user.uid,
-        email: result.user.email || email.toLowerCase(),
-        name: result.user.name || email.split("@")[0],
-        role: result.user.role,
-        verified: result.user.email_verified === true
-      };
-      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
-      return user;
-    }
     function renderAuthState(user) {
       currentUser = user;
-      const authenticated = !!user?.token && !!user?.email;
+      const authenticated = !!user?.email;
       $("authPanel").classList.toggle(
         "hidden", authenticated
       );
@@ -670,45 +650,29 @@
 
     const authParams = new URLSearchParams(window.location.search);
     const authStatus = authParams.get("status");
-    const authToken = authParams.get("auth_token") || authParams.get("auth_ID") || authParams.get("token") || authParams.get("id_token");
     const authEmail = authParams.get("email");
     if (authStatus === "authenticated" || authStatus === "success") {
-      if (authToken && authEmail) {
-        establishPortalSession(authToken, authEmail)
-          .then(session => {
-            renderAuthState(session);
-            notify("Yash12007 Authenticated.", "success");
-            if (authParams.get("uid")) retrieveAgreement(authParams.get("uid"));
-          })
-          .catch(error => {
-            localStorage.removeItem(AUTH_STORAGE_KEY);
-            renderAuthState(null);
-            notify(error.message, "error");
-          });
+      if (authEmail) {
+        const session = {
+          email: authEmail.toLowerCase(),
+          name: authParams.get("name") || authEmail.split("@")[0],
+          provider: authParams.get("provider") || "email/passkey",
+          authenticatedAt: Date.now()
+        };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+        currentUser = session;
+        renderAuthState(session);
+        notify("Signed in with Yash12007 Auth.", "success");
       } else {
-        notify("Authentication callback did not include an auth token and email.", "error");
+        notify("Authentication callback did not include an email.", "error");
       }
       window.history.replaceState({}, document.title, window.location.origin + window.location.pathname + window.location.hash);
     }
 
     try {
       const storedSession = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || "null");
-      if (storedSession?.token) {
+      if (storedSession?.email) {
         renderAuthState(storedSession);
-        fetch(`${PAYMENT_PORTAL_API}/auth/session`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: storedSession.token })
-        }).then(async response => {
-          const result = await response.json().catch(() => ({}));
-          if (!response.ok || !result.success) throw new Error("Stored auth session expired");
-          currentUser = { ...storedSession, ...result.user, token: storedSession.token };
-          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
-          renderAuthState(currentUser);
-        }).catch(() => {
-          localStorage.removeItem(AUTH_STORAGE_KEY);
-          renderAuthState(null);
-        });
       } else {
         renderAuthState(null);
       }
@@ -718,7 +682,7 @@
     }
     $("createBtn").onclick = async () => {
       try {
-        if (!currentUser?.token) throw new Error("Sign in with Yash12007 Auth first.");
+        if (!currentUser?.email) throw new Error("Sign in with Yash12007 Auth first.");
         const agreement = {
           uid: crypto.randomUUID(),
           agreementType: clean($("type").value),
@@ -872,7 +836,7 @@
         }
         signature.append(block);
       }
-      const canSign = currentUser && a.status === "PENDING";
+      const canSign = currentUser && currentUser.email.toLowerCase() === a.partyBEmail && a.status === "PENDING";
       $("signPanel").classList.toggle(
         "hidden", !canSign
       );
@@ -883,7 +847,8 @@
         if (!a || !currentUser) {
           throw new Error("Authentication required.");
         }
-        if (!currentUser.token) throw new Error("Sign in with Yash12007 Auth before signing.");
+        if (!currentUser.email) throw new Error("Sign in with Yash12007 Auth before signing.");
+        if (currentUser.email.toLowerCase() !== a.partyBEmail) throw new Error("This agreement belongs to another client.");
         if (
           currentUser.email.toLowerCase() !== a.partyBEmail
         ) {
