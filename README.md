@@ -1,4 +1,4 @@
-# DAR - Digital Agreement Registry
+# Digital Agreement Registry
 for Yash12007 to store the digital signatures, agreements, and let users download their own
 
 ---
