@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Yash12007 | Digital Agreement Registry</title>
+  <link rel="shortcut icon" href="https://www.yash12007.com/favicon/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f8fc;
+      --surface: #ffffff;
+      --primary: #00aeca;
+      --primary-dark: #008da6;
+      --text: #172638;
+      --muted: #718096;
+      --border: #e3eaf1;
+      --success: #16875b;
+      --danger: #d64a59;
+    }
+    * {
+      box-sizing: border-box
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Jura', sans-serif;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(255, 255, 255, .95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 15px max(calc((100% - 1120px)/2), 20px);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .brand {
+      font-weight: 850;
+      font-size: 20px;
+      letter-spacing: -.7px;
+    }
+    .account {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    main {
+      width: min(100% - 32px, 1050px);
+      margin: 35px auto;
+    }
+    h1 {
+      font-size: 31px;
+      letter-spacing: -1px;
+      margin: 0 0 8px;
+    }
+    h2 {
+      font-size: 20px;
+      margin: 0 0 18px
+    }
+    h3 {
+      font-size: 16px
+    }
+    p {
+      line-height: 1.65
+    }
+    .muted {
+      color: var(--muted)
+    }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 23px;
+      margin: 18px 0;
+      box-shadow: 0 5px 22px rgba(20, 40, 70, .035);
+    }
+    #authPanel {
+      width: fit-content;
+      max-width: 100%;
+      min-width: min(100%, 350px);
+      margin: 35px auto;
+      display: flex;
+      place-items: center;
+      justify-content: center;
+    }
+    .auth-content {
+      width: min(100%, 330px);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 18px;
+    }
+    .field {
+      min-width: 0
+    }
+    label {
+      display: block;
+      color: #43546a;
+      font-size: 13px;
+      font-weight: 650;
+      margin-bottom: 6px;
+    }
+    input,
+    select,
+    textarea {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 12px 13px;
+      font: inherit;
+      font-size: 14px;
+      margin: 7px 0 16px;
+      outline: none;
+      transition: .2s;
+    }
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 174, 202, .12);
+    }
+    textarea {
+      min-height: 155px;
+      resize: vertical;
+      line-height: 1.7;
+    }
+    button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: .2s;
+      margin: 4px 3px 4px 0;
+    }
+    button:hover {
+      background: var(--primary-dark)
+    }
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed
+    }
+    button.secondary {
+      background: #edf2f7;
+      color: #34465c;
+    }
+    button.secondary:hover {
+      background: #e0e8f0
+    }
+    button.danger {
+      background: #fff0f0;
+      color: var(--danger);
+    }
+    button.google-button {
+      background: #fff;
+      color: #263445;
+      border: 1px solid var(--border);
+      width: 100%;
+      margin-top: 12px;
+    }
+    .google-button:hover {
+      background: #f7f9fc
+    }
+    .google-button img {
+      width: 19px;
+      height: 19px;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #9aa8b8;
+      font-size: 12px;
+      margin: 17px 0;
+    }
+    .divider:before,
+    .divider:after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border);
+    }
+    .status {
+      padding: 13px 15px;
+      border: 1px solid #c8edf4;
+      background: #edfbfd;
+      color: #007e94;
+      border-radius: 9px;
+      overflow-wrap: anywhere;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+    .status.error {
+      background: #fff2f2;
+      border-color: #f4d0d0;
+      color: #bd3848;
+    }
+    .status.success {
+      background: #edfaf3;
+      border-color: #ccebd9;
+      color: #14794d;
+    }
+    .badge {
+      display: inline-block;
+      background: #e8f8f3;
+      color: var(--success);
+      border-radius: 30px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .badge.pending {
+      background: #fff5df;
+      color: #946300;
+    }
+    .hidden {
+      display: none !important
+    }
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .search-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .search-row input {
+      flex: 1;
+      margin: 0;
+    }
+    .search-row button {
+      white-space: nowrap
+    }
+    #documentView {
+      background: white;
+      color: #202c3b;
+      border: 1px solid #e3e7ed;
+      border-radius: 8px;
+      padding: 42px;
+      margin-top: 22px;
+      font-family: Georgia, "Times New Roman", serif;
+      overflow-wrap: anywhere;
+    }
+    #documentView h2 {
+      font-family: Georgia, serif;
+      text-align: center;
+      font-size: 23px;
+      margin-bottom: 10px;
+    }
+    .document-subtitle {
+      text-align: center;
+      color: #667386;
+      font-size: 12px;
+    }
+    .doc-meta {
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+      margin: 20px 0;
+    }
+    .doc-meta p {
+      margin: 8px 0;
+      font-size: 13px
+    }
+    .doc-clause {
+      white-space: pre-wrap;
+      line-height: 1.9;
+      font-size: 14px;
+    }
+    .signature-block {
+      border-top: 1px solid #dce2e9;
+      padding-top: 20px;
+      margin-top: 35px;
+      page-break-inside: avoid;
+    }
+    .signature-hash {
+      font-family: monospace;
+      font-size: 10px;
+      overflow-wrap: anywhere;
+      color: #526071;
+    }
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 15px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .consent-row input {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin: 2px 0;
+    }
+    .info {
+      background: #f2f9fc;
+      border: 1px solid #d8edf2;
+      color: #416477;
+      padding: 13px;
+      border-radius: 9px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 35px 15px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media(max-width:650px) {
+      header {
+        padding: 14px 17px
+      }
+      main {
+        margin: 25px auto
+      }
+      h1 {
+        font-size: 26px
+      }
+      .grid {
+        grid-template-columns: 1fr
+      }
+      .panel {
+        padding: 17px
+      }
+      #documentView {
+        padding: 22px 17px
+      }
+      .search-row {
+        flex-wrap: wrap
+      }
+      .search-row input {
+        flex-basis: 100%
+      }
+      .account {
+        font-size: 11px
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Yash12007</div>
+    <div class="account">
+      <span id="authLabel">Not signed in</span>
+      <button id="logoutBtn" class="secondary hidden">Sign out</button>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h1>Digital Agreement Registry</h1>
+      <p class="muted">
+        Secure agreement management, electronic acceptance
+        and document verification by Yash12007.
+      </p>
+    </section>
+    <section id="authPanel" class="panel">
+      <div class="auth-content">
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in with Yash12007 Auth to access your agreements.</p>
+        <button id="authBtn" style="width:100%">Continue to Yash12007 Auth</button>
+      </div>
+    </section>
+    <section id="appPanel" class="hidden">
+      <div id="userInfo" class="panel">
+        <div class="top-actions">
+          <div>
+            <strong>Account authenticated</strong>
+            <p class="muted" id="accountEmail"></p>
+          </div>
+          <span id="accountBadge" class="badge">Verified</span>
+        </div>
+      </div>
+      <section id="createPanel" class="panel hidden">
+        <h2>Create a new agreement</h2>
+        <p class="muted">
+          Generate an agreement UID and register its immutable
+          terms for client acceptance.
+        </p>
+        <div class="grid">
+          <div class="field">
+            <label for="type">Agreement type</label>
+            <select id="type">
+              <option value="MOU">Memorandum of Understanding (MOU)</option>
+              <option value="NDA">Non-Disclosure Agreement (NDA)</option>
+              <option value="SLA">Service Level Agreement (SLA)</option>
+              <option value="CONTRACT">Service Contract</option>
+              <option value="OTHER">Other Agreement</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="number">Agreement number</label>
+            <input id="number" placeholder="Y12007-AGR-2026-001">
+          </div>
+          <div class="field">
+            <label for="partyA">First party name</label>
+            <input id="partyA" placeholder="Yash12007 representative">
+          </div>
+          <div class="field">
+            <label for="partyAEmail">First party email</label>
+            <input id="partyAEmail" type="email">
+          </div>
+          <div class="field">
+            <label for="partyB">Second party name</label>
+            <input id="partyB" placeholder="Client's legal name">
+          </div>
+          <div class="field">
+            <label for="partyBEmail">Second party email</label>
+            <input id="partyBEmail" type="email">
+          </div>
+        </div>
+        <label for="clauses">
+          Agreement clauses and rules
+        </label>
+        <textarea id="clauses" maxlength="15000" placeholder="1. Scope of agreement
+2. Responsibilities of the parties
+3. Confidentiality
+4. Payment terms
+5. Termination
+6. Dispute resolution"></textarea>
+        <div class="info">
+          Once created, the agreement terms cannot be modified
+          through this portal. Create a new agreement version
+          if the parties need revised terms.
+        </div>
+        <button id="createBtn">Create agreement</button>
+      </section>
+      <section class="panel">
+        <h2>Find an agreement</h2>
+        <p class="muted">
+          Enter the unique agreement UID to retrieve its record.
+        </p>
+        <div class="search-row">
+          <input id="searchUID" placeholder="Enter agreement UID">
+          <button id="searchBtn">Search</button>
+        </div>
+      </section>
+      <section id="agreementPanel" class="panel hidden">
+        <div class="top-actions">
+          <div>
+            <h2 style="margin:0">Agreement record</h2>
+            <p class="muted" id="displayUID"></p>
+          </div>
+          <span id="agreementStatus" class="badge pending">
+            PENDING
+          </span>
+        </div>
+        <div id="documentView">
+          <h2 id="docTitle"></h2>
+          <div class="document-subtitle">
+            YASH12007 · OFFICIAL AGREEMENT RECORD
+          </div>
+          <div id="docMeta" class="doc-meta"></div>
+          <h3>Terms and conditions</h3>
+          <div id="docClauses" class="doc-clause"></div>
+          <div id="signatureDisplay"></div>
+        </div>
+        <section id="signPanel" class="panel hidden">
+          <h2>Electronic acceptance</h2>
+          <p class="muted">
+            Review the complete agreement before providing
+            your electronic acceptance.
+          </p>
+          <div class="info">
+            Signing is an intentional electronic acceptance
+            of the agreement presented above. The system will
+            record your authenticated account, acceptance
+            timestamp and cryptographic evidence.
+          </div>
+          <label for="signerName">Your full legal name</label>
+          <input id="signerName" placeholder="Enter your full legal name">
+          <label class="consent-row">
+            <input type="checkbox" id="consent">
+            <span>
+              I confirm that I have read and understood this
+              agreement, that I am authorized to accept it,
+              and that I voluntarily agree to its terms.
+              I consent to recording this electronic acceptance.
+            </span>
+          </label>
+          <button id="signBtn">Accept and sign agreement</button>
+        </section>
+        <section class="panel">
+          <h2>Document actions</h2>
+          <button id="pdfBtn">Download agreement PDF</button>
+          <button id="copyBtn" class="secondary">Copy agreement UID</button>
+        </section>
+      </section>
+    </section>
+    <div id="status" class="status" role="status">
+      Initializing application...
+    </div>
+  </main>
+  <footer>
+    <strong>Yash12007</strong>
+    <p>Digital Agreement Registry</p>
+    <p>© 2026 Yash12007. All rights reserved.</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+  <script>
+    const PAYMENT_PORTAL_API = "https://payments.yash12007.com/api/v1";
+    const AUTH_URL = "https://auth.yash12007.com/";
+    const AUTH_STORAGE_KEY = "yash12007_auth_user";
+    const AUTH_CALLBACK_PATH = "/";
+    const AUTH_ORIGIN = window.location.origin;
+    const AUTH_REDIRECT = `${AUTH_ORIGIN}${AUTH_CALLBACK_PATH}`;
+    const $ = id => document.getElementById(id);
+    let currentUser = null;
+    let activeAgreement = null;
+    function notify(message, type = "normal") {
+      const element = $("status");
+      element.textContent = message;
+      element.className = "status";
+      if (type === "error") element.classList.add("error");
+      if (type === "success") element.classList.add("success");
+    }
+    function clean(value) {
+      return String(value ?? "").trim();
+    }
+    function isAdmin() {
+      return currentUser?.role === "admin";
+    }
+    function isVerified() {
+      return currentUser?.verified === true;
+    }
+    function canonicalAgreement(a) {
+      return JSON.stringify({
+        uid: a.uid,
+        agreementType: a.agreementType,
+        agreementNumber: a.agreementNumber,
+        partyAName: a.partyAName,
+        partyAEmail: a.partyAEmail,
+        partyBName: a.partyBName,
+        partyBEmail: a.partyBEmail,
+        clauses: a.clauses,
+        createdAt: a.createdAt
+      });
+    }
+    async function sha256(value) {
+      const data = new TextEncoder().encode(value);
+      const digest = await crypto.subtle.digest(
+        "SHA-256",
+        data
+      );
+      return Array.from(new Uint8Array(digest))
+        .map(x => x.toString(16).padStart(2, "0"))
+        .join("");
+    }
+    function signaturePayload(a) {
+      return JSON.stringify({
+        agreementUID: a.uid,
+        documentHash: a.documentHash,
+        signatureName: a.signatureName,
+        signerEmail: a.partyBEmail,
+        signerUID: a.signerUID,
+        consent: true,
+        signedAt: a.signedAt
+      });
+    }
+    async function apiRequest(path, options = {}) {
+      if (!currentUser?.token) throw new Error("Sign in to continue.");
+      const response = await fetch(`${PAYMENT_PORTAL_API}${path}`, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          ...(options.headers || {}),
+          Authorization: `Bearer ${currentUser.token}`
+        }
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.message || `Request failed (${response.status})`);
+      return result;
+    }
+
+    async function establishPortalSession(authToken, email) {
+      const response = await fetch(`${PAYMENT_PORTAL_API}/auth/session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: authToken })
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.success || !result.user) {
+        throw new Error(result.message || "Could not validate the Yash12007 Auth session.");
+      }
+      const user = {
+        token: authToken,
+        uid: result.user.uid,
+        email: result.user.email || email.toLowerCase(),
+        name: result.user.name || email.split("@")[0],
+        role: result.user.role,
+        verified: result.user.email_verified === true
+      };
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+      return user;
+    }
+    function renderAuthState(user) {
+      currentUser = user;
+      const authenticated = !!user?.token && !!user?.email;
+      $("authPanel").classList.toggle(
+        "hidden", authenticated
+      );
+      $("appPanel").classList.toggle(
+        "hidden", !authenticated
+      );
+      $("logoutBtn").classList.toggle(
+        "hidden", !authenticated
+      );
+      $("createPanel").classList.toggle("hidden", !isAdmin());
+      $("authLabel").textContent = authenticated
+        ? user.email
+        : "Not signed in";
+      $("accountEmail").textContent = authenticated
+        ? user.email
+        : "";
+      $("accountBadge").textContent = authenticated
+        ? "Authenticated"
+        : "Sign in required";
+      $("accountBadge").className = authenticated
+        ? "badge"
+        : "badge pending";
+      if (!authenticated) {
+        activeAgreement = null;
+        $("agreementPanel").classList.add("hidden");
+      }
+    }
+
+    function startAuth() {
+      const authUrl = new URL(AUTH_URL);
+      authUrl.searchParams.set("origin", AUTH_ORIGIN);
+      authUrl.searchParams.set("redirect", AUTH_REDIRECT);
+      window.location.assign(authUrl.toString());
+    }
+
+    $("authBtn").onclick = startAuth;
+    $("logoutBtn").onclick = () => {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      currentUser = null;
+      activeAgreement = null;
+      renderAuthState(null);
+      notify("Signed out.", "success");
+    };
+
+    const authParams = new URLSearchParams(window.location.search);
+    const authStatus = authParams.get("status");
+    const authToken = authParams.get("auth_token") || authParams.get("auth_ID") || authParams.get("token") || authParams.get("id_token");
+    const authEmail = authParams.get("email");
+    if (authStatus === "authenticated" || authStatus === "success") {
+      if (authToken && authEmail) {
+        establishPortalSession(authToken, authEmail)
+          .then(session => {
+            renderAuthState(session);
+            notify("Yash12007 Authenticated.", "success");
+            if (authParams.get("uid")) retrieveAgreement(authParams.get("uid"));
+          })
+          .catch(error => {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            renderAuthState(null);
+            notify(error.message, "error");
+          });
+      } else {
+        notify("Authentication callback did not include an auth token and email.", "error");
+      }
+      window.history.replaceState({}, document.title, window.location.origin + window.location.pathname + window.location.hash);
+    }
+
+    try {
+      const storedSession = JSON.parse(localStorage.getItem(AUTH_STORAGE_KEY) || "null");
+      if (storedSession?.token) {
+        renderAuthState(storedSession);
+        fetch(`${PAYMENT_PORTAL_API}/auth/session`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: storedSession.token })
+        }).then(async response => {
+          const result = await response.json().catch(() => ({}));
+          if (!response.ok || !result.success) throw new Error("Stored auth session expired");
+          currentUser = { ...storedSession, ...result.user, token: storedSession.token };
+          localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(currentUser));
+          renderAuthState(currentUser);
+        }).catch(() => {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          renderAuthState(null);
+        });
+      } else {
+        renderAuthState(null);
+      }
+    } catch {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      renderAuthState(null);
+    }
+    $("createBtn").onclick = async () => {
+      try {
+        if (!currentUser?.token) throw new Error("Sign in with Yash12007 Auth first.");
+        const agreement = {
+          uid: crypto.randomUUID(),
+          agreementType: clean($("type").value),
+          agreementNumber: clean($("number").value),
+          partyAName: clean($("partyA").value),
+          partyAEmail: clean($("partyAEmail").value).toLowerCase(),
+          partyBName: clean($("partyB").value),
+          partyBEmail: clean($("partyBEmail").value).toLowerCase(),
+          clauses: clean($("clauses").value),
+          status: "PENDING",
+          createdAt: new Date().toISOString(),
+          createdBy: currentUser.email,
+          documentHash: "",
+          signatureName: "",
+          signatureHash: "",
+          signedAt: "",
+          signerUID: ""
+        };
+        if (
+          !agreement.agreementNumber ||
+          !agreement.partyAName ||
+          !agreement.partyAEmail ||
+          !agreement.partyBName ||
+          !agreement.partyBEmail ||
+          !agreement.clauses
+        ) {
+          throw new Error("Complete all required fields.");
+        }
+        if (agreement.clauses.length > 15000) {
+          throw new Error("Agreement content exceeds the limit.");
+        }
+        if (
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(agreement.partyAEmail) ||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(agreement.partyBEmail)
+        ) {
+          throw new Error("Enter valid party email addresses.");
+        }
+        $("createBtn").disabled = true;
+        agreement.documentHash = await sha256(
+          canonicalAgreement(agreement)
+        );
+        const created = await apiRequest("/agreements", {
+          method: "POST",
+          body: JSON.stringify({
+            agreementType: agreement.agreementType,
+            agreementNumber: agreement.agreementNumber,
+            partyAName: agreement.partyAName,
+            partyAEmail: agreement.partyAEmail,
+            partyBName: agreement.partyBName,
+            partyBEmail: agreement.partyBEmail,
+            clauses: agreement.clauses
+          })
+        });
+        agreement.uid = created.agreement.uid;
+        $("searchUID").value = agreement.uid;
+        notify(
+          "Agreement successfully created: " + agreement.uid,
+          "success"
+        );
+        await retrieveAgreement(agreement.uid);
+      } catch (error) {
+        notify(error.message, "error");
+      } finally {
+        $("createBtn").disabled = false;
+      }
+    };
+    async function retrieveAgreement(uid) {
+      try {
+        if (!currentUser) {
+          throw new Error("Sign in to retrieve an agreement.");
+        }
+        uid = clean(uid);
+        if (!uid) {
+          throw new Error("Enter an agreement UID.");
+        }
+        notify("Retrieving agreement...");
+        const result = await apiRequest(`/agreements/${encodeURIComponent(uid)}`, {
+          method: "GET"
+        });
+        const agreement = result.agreement;
+        activeAgreement = agreement;
+        renderAgreement();
+        notify("Agreement successfully verified and retrieved.", "success");
+      } catch (error) {
+        activeAgreement = null;
+        $("agreementPanel").classList.add("hidden");
+        notify(error.message, "error");
+      }
+    }
+    $("searchBtn").onclick = () => {
+      retrieveAgreement($("searchUID").value);
+    };
+    function renderAgreement() {
+      const a = activeAgreement;
+      if (!a) return;
+      $("agreementPanel").classList.remove("hidden");
+      $("displayUID").textContent = "UID: " + a.uid;
+      $("agreementStatus").textContent = a.status;
+      $("agreementStatus").className =
+        a.status === "SIGNED"
+          ? "badge"
+          : "badge pending";
+      $("docTitle").textContent =
+        a.agreementType + " AGREEMENT";
+      const metadata = $("docMeta");
+      metadata.replaceChildren();
+      const fields = [
+        ["Agreement number", a.agreementNumber],
+        ["Agreement UID", a.uid],
+        ["First party", a.partyAName],
+        ["First party email", a.partyAEmail],
+        ["Second party", a.partyBName],
+        ["Second party email", a.partyBEmail],
+        ["Creation timestamp", a.createdAt]
+      ];
+      for (const [label, value] of fields) {
+        const p = document.createElement("p");
+        const strong = document.createElement("strong");
+        strong.textContent = label + ": ";
+        p.append(
+          strong,
+          document.createTextNode(value || "")
+        );
+        metadata.append(p);
+      }
+      $("docClauses").textContent = a.clauses;
+      const signature = $("signatureDisplay");
+      signature.replaceChildren();
+      if (a.status === "SIGNED") {
+        const block = document.createElement("div");
+        block.className = "signature-block";
+        const heading = document.createElement("h3");
+        heading.textContent = "Electronic signature evidence";
+        block.append(heading);
+        const details = [
+          ["Signer name", a.signatureName],
+          ["Signed at", a.signedAt],
+          ["Signer UID", a.signerUID],
+          ["Document SHA-256", a.documentHash],
+          ["Signature SHA-256", a.signatureHash]
+        ];
+        for (const [label, value] of details) {
+          const p = document.createElement("p");
+          const strong = document.createElement("strong");
+          strong.textContent = label + ": ";
+          const span = document.createElement("span");
+          span.className = "signature-hash";
+          span.textContent = value || "";
+          p.append(strong, span);
+          block.append(p);
+        }
+        signature.append(block);
+      }
+      const canSign = currentUser && a.status === "PENDING";
+      $("signPanel").classList.toggle(
+        "hidden", !canSign
+      );
+    }
+    $("signBtn").onclick = async () => {
+      try {
+        const a = activeAgreement;
+        if (!a || !currentUser) {
+          throw new Error("Authentication required.");
+        }
+        if (!currentUser.token) throw new Error("Sign in with Yash12007 Auth before signing.");
+        if (
+          currentUser.email.toLowerCase() !== a.partyBEmail
+        ) {
+          throw new Error("This agreement belongs to another client.");
+        }
+        if (a.status !== "PENDING") {
+          throw new Error("This agreement is no longer pending.");
+        }
+        const signerName = clean($("signerName").value);
+        if (!$("consent").checked) {
+          throw new Error("You must explicitly accept the agreement.");
+        }
+        $("signBtn").disabled = true;
+        await apiRequest(`/agreements/${encodeURIComponent(a.uid)}/sign`, {
+          method: "POST",
+          body: JSON.stringify({
+            signatureName: signerName,
+            consent: true
+          })
+        });
+        await retrieveAgreement(a.uid);
+        notify(
+          "Your electronic acceptance has been recorded.",
+          "success"
+        );
+      } catch (error) {
+        notify(error.message, "error");
+      } finally {
+        $("signBtn").disabled = false;
+      }
+    };
+    $("pdfBtn").onclick = async () => {
+      try {
+        const a = activeAgreement;
+        if (!a) {
+          throw new Error("No agreement selected.");
+        }
+        const pdf = new window.jspdf.jsPDF({
+          orientation: "portrait",
+          unit: "mm",
+          format: "a4"
+        });
+        const margin = 18;
+        const width = 210 - margin * 2;
+        let y = 22;
+        function addText(text, size = 10, bold = false) {
+          pdf.setFont(
+            "helvetica",
+            bold ? "bold" : "normal"
+          );
+          pdf.setFontSize(size);
+          const lines = pdf.splitTextToSize(
+            String(text ?? ""),
+            width
+          );
+          const height = lines.length * size * 0.45 + 3;
+          if (y + height > 275) {
+            pdf.addPage();
+            y = 22;
+          }
+          pdf.text(lines, margin, y);
+          y += height;
+        }
+        addText("YASH12007", 19, true);
+        addText("DIGITAL AGREEMENT REGISTRY", 11, true);
+        addText(a.agreementType + " AGREEMENT", 16, true);
+        y += 5;
+        addText("AGREEMENT NUMBER: " + a.agreementNumber, 10);
+        addText("AGREEMENT UID: " + a.uid, 9);
+        addText("STATUS: " + a.status, 10, true);
+        addText("CREATED: " + a.createdAt, 9);
+        y += 5;
+        addText("FIRST PARTY", 12, true);
+        addText(a.partyAName);
+        addText(a.partyAEmail, 9);
+        y += 4;
+        addText("SECOND PARTY", 12, true);
+        addText(a.partyBName);
+        addText(a.partyBEmail, 9);
+        y += 5;
+        addText("TERMS AND CONDITIONS", 12, true);
+        addText(a.clauses, 10);
+        y += 8;
+        addText("ELECTRONIC SIGNATURE EVIDENCE", 12, true);
+        if (a.status === "SIGNED") {
+          addText("Signer: " + a.signatureName);
+          addText("Signed at: " + a.signedAt);
+          addText("Signer UID: " + a.signerUID, 9);
+          addText("Document SHA-256: " + a.documentHash, 8);
+          addText("Signature SHA-256: " + a.signatureHash, 8);
+        } else {
+          addText("This agreement has not been signed.");
+        }
+        y += 8;
+        addText(
+          "This PDF is a rendered representation of the agreement registry record.",
+          8
+        );
+        addText(
+          "Generated by Yash12007 Digital Agreement Registry.",
+          8
+        );
+        pdf.save(
+          "Yash12007-Agreement-" + a.uid + ".pdf"
+        );
+        notify("PDF generated successfully.", "success");
+      } catch (error) {
+        notify(error.message, "error");
+      }
+    };
+    $("copyBtn").onclick = async () => {
+      if (!activeAgreement) return;
+      try {
+        await navigator.clipboard.writeText(
+          activeAgreement.uid
+        );
+        notify("Agreement UID copied.", "success");
+      } catch (error) {
+        notify("Unable to copy UID: " + error.message, "error");
+      }
+    };
+    const requestedUID = authParams.get("uid");
+    if (requestedUID) {
+      $("searchUID").value = requestedUID;
+      if (currentUser?.token) retrieveAgreement(requestedUID);
+    }
+  </script>
+</body>
+</html>
